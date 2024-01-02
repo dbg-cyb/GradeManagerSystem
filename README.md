@@ -1,0 +1,2 @@
+# GradeManagerSystem
+基于sqlite3数据库的成绩管理系统
