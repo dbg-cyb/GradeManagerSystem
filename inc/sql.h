@@ -13,7 +13,7 @@ int sql_uninit();
 int sql_add_table(TABLEINFO info);
 
 // 数据查询
-void *sql_select(AddObject *info);
+SelectInfo *sql_select(AddObject *info);
 
 // 添加数据
 int sql_add(AddObject *info, char *filename);
@@ -24,6 +24,8 @@ int sql_del(AddObject *info);
 // 修改数据
 int sql_alter(AddObject *old_info, AddObject *new_info);
 
+// 释放sql查询资源
+int sql_free( SelectInfo *data );
 
 
 

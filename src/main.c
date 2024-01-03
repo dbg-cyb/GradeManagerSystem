@@ -4,11 +4,14 @@
 
 #define MANAGER_DATABASE "./manager.db"
 
+#define VERSION "V1.1.0"
+
 void print_menu()
 {
     printf("\t\t\t|==============================================|\n");
     printf("\t\t\t|                                              |\n");
     printf("\t\t\t|             欢迎使用信息管理系统             |  \n");
+    printf("\t\t\t|                   (%s)                   |  \n", VERSION);
     printf("\t\t\t|                                              |\n");
     printf("\t\t\t|==============================================|\n");
     printf("\t\t\t|              请选择要操作的命令              |  \n");
@@ -71,13 +74,14 @@ void print_score()
     printf("\t\t\t|==============================================|\n");
 }
 
-// 学生管理系统
+// 用户管理模块
 void _user_manager_enter()
 {
     int run = 1;
     int ret = -1;
     int choose = 0;
 
+    // 打印菜单
     print_stu();
     while(run)
     {   
@@ -101,23 +105,23 @@ void _user_manager_enter()
             case 5:         // 清空
                 user_clear();
                 break;
-            case 6:
-                run = 0;
+            case 6:         // 返回主模块
                 system("clear");
+                run = 0;
                 break;
-            case 0:
+            case 0:         // 清屏显示
                 system("clear");
                 print_stu();
                 break;
-            
             default:
+                printf("输入错误，请重新输入!\n");
                 break;
         }
 
     }
 }
 
-// 课程管理系统
+// 课程管理模块
 void _subject_manager_enter()
 {
     int run = 1;
@@ -133,30 +137,30 @@ void _subject_manager_enter()
         switch (choose)
         {
             case 1:
-                sbuject_query();
+                sbuject_query();    // 查询
                 break;
             case 2:
-                sbuject_add();
+                sbuject_add();      // 添加
                 break;
             case 3:
-                sbuject_del();
+                sbuject_del();      // 删除
                 break;
             case 4:
-                sbuject_alter();
+                sbuject_alter();    // 修改
                 break;
             case 5:
-                sbuject_clear();
+                sbuject_clear();    // 清空
                 break;
             case 6:
+                system("clear");    // 返回主模块
                 run = 0;
-                system("clear");
                 break;
             case 0:
-                system("clear");
+                system("clear");    // 清屏
                 print_subject();
                 break;
-            
             default:
+                printf("输入错误，请重新输入!\n");
                 break;
         }
 
@@ -179,33 +183,33 @@ void _grade_manager_enter()
         switch (choose)
         {
             case 1:
-                grade_query();
+                grade_query();  // 查询
                 break;
             case 2:
-                grade_add();
+                grade_add();    // 添加
                 break;
             case 3:
-                grade_del();
+                grade_del();    // 删除
                 break;
             case 4:
-                grade_alter();
+                grade_alter();  // 修改
                 break;
             case 5:
-                grade_clear();
+                grade_clear();  // 清空
                 break;
             case 6:
-                grade_sort();
+                grade_sort();   // 排序
                 break;
             case 7:
+                system("clear");    // 返回主模块
                 run = 0;
-                system("clear");
                 break;
             case 0:
-                system("clear");
+                system("clear");    // 清屏
                 print_score();
                 break;
-            
             default:
+                printf("输入错误，请重新输入!\n");
                 break;
         }
 
@@ -216,6 +220,7 @@ int main()
 {
     int ret = -1;
     int choose = 0;
+    int run = 0;
 
     // 初始化管理系统
     ret = tools_manager_init(MANAGER_DATABASE);
@@ -225,37 +230,35 @@ int main()
         return ret;
     }
 
-    print_menu();
+    run = 1;
 
-    while(1)
+    while(run)
     {
+        // 打印菜单
+        print_menu();
         printf("请选择要操作的命令: \n");
         scanf("%d", &choose);
 
         switch (choose)
         {
             case 1:
-                system("clear");
-                _user_manager_enter();
-                print_menu();
+                system("clear");            // 清屏操作
+                _user_manager_enter();      // 用户管理模块
                 break;
             case 2:
                 system("clear");
-                _subject_manager_enter();
-                print_menu();
+                _subject_manager_enter();   // 课程管理模块
                 break;
             case 3:
                 system("clear");
-                _grade_manager_enter();
-                print_menu();
+                _grade_manager_enter();     // 成绩管理模块
                 break;
             case 4:
                 printf("欢迎下次使用，再见\n");
-                goto OUT;
+                run = 0;
                 break;
             case 0:
                 system("clear");
-                print_menu();
                 break;
             default:
                 printf("请输入正确的选项!\n");
@@ -263,7 +266,6 @@ int main()
         }
     }
 
-OUT:
     tools_manager_uninit();
 
     return 0;

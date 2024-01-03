@@ -2,43 +2,52 @@
 #include <assert.h>
 #include "user_manager.h"
 #include "subject_manager.h"
-#include "score_manager.h"
+#include "grade_manager.h"
 #include "tools.h"
 #include "common.h"
 
+// 管理系统初始化
 int tools_manager_init(const char *database_name)
 {
     assert(database_name);
 
     int ret = -1;
-    // 学生管理系统初始化
+    // 学生管理模块初始化
     ret = user_manager_init(database_name);
     if( ret < 0 )
     {
         printf("user_manager init is fail.\n");
-        return ret;
+        goto QUIT;
     }
 
-    // 课程管理系统初始化
+    // 课程管理模块初始化
     ret = subject_manager_init(database_name);
     if( ret < 0 )
     {
         printf("subject_manager init is fail.\n");
-        return ret;
+        goto USER_MANAGER_UNINIT;
     }
 
-    // 成绩管理系统初始化
+    // 成绩管理模块初始化
     ret = grade_manager_init(database_name);
     if( ret < 0 )
     {
         printf("grade_manager init is fail.\n");
-        return ret;
+        goto SUBJECT_MANAGER_UNINIT;
     }
 
+    return ret;
 
+    // 初始化失败，反初始化
+SUBJECT_MANAGER_UNINIT:
+    subject_manager_uninit();
+USER_MANAGER_UNINIT:
+    user_manager_uninit();
+QUIT:
     return ret;
 }
 
+// 管理系统反初始化
 int tools_manager_uninit()
 {
     // 学生管理系统反初始化
@@ -52,6 +61,11 @@ int tools_manager_uninit()
 
     return 0;
 }
+
+
+/********************************************/
+/*              用户管理模块                 */
+/********************************************/
 
 // 添加用户
 void user_add()
@@ -83,7 +97,10 @@ void user_clear()
     user_manager_clear(NULL);
 }
 
-// ==============================
+
+/********************************************/
+/*              课程管理模块                 */
+/********************************************/
 
 // 添加用户
 void sbuject_add()
@@ -116,7 +133,10 @@ void sbuject_clear()
 }
 
 
-// ==============================
+
+/********************************************/
+/*              成绩管理模块                 */
+/********************************************/
 
 // 添加成绩
 void grade_add()

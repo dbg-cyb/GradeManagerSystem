@@ -1,5 +1,5 @@
-#ifndef __SCORE_MANAGER_H__
-#define __SCORE_MANAGER_H__
+#ifndef __GRADE_MANAGER_H__
+#define __GRADE_MANAGER_H__
 
 #include "common.h"
 
@@ -25,4 +25,4 @@ int grade_manager_select( GradeTable* gt );
 int grade_manager_alter( GradeTable* gt );
 
 
-#endif // !__SCORE_MANAGER_H__
+#endif // !__GRADE_MANAGER_H__

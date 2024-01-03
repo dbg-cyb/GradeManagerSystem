@@ -10,19 +10,19 @@ int user_manager_init(const char *database_name);
 int user_manager_uninit();
 
 // 添加用户
-int user_manager_add( StuInfo* sf );
+int user_manager_add( UserInfo* sf );
 
 // 删除用户
-int user_manager_del( StuInfo* sf );
+int user_manager_del( UserInfo* sf );
 
 // 清空用户
-int user_manager_clear( StuInfo* sf );
+int user_manager_clear( UserInfo* sf );
 
 // 查询用户
-int user_manager_select( StuInfo* sf );
+int user_manager_select( UserInfo* sf );
 
 // 修改用户
-int user_manager_alter( StuInfo* sf );
+int user_manager_alter( UserInfo* sf );
 
 #endif
 
