@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tools.h"
+#include "config.h"
 
 #define MANAGER_DATABASE "./manager.db"
-
-#define VERSION "V1.1.0"
 
 void print_menu()
 {

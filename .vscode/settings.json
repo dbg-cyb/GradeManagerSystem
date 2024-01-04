@@ -5,6 +5,8 @@
         "assert.h": "c",
         "sql.h": "c",
         "user_manager.h": "c",
-        "stdio.h": "c"
-    }
+        "stdio.h": "c",
+        "subject_manager.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
