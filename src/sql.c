@@ -204,16 +204,22 @@ SelectInfo *sql_select(AddObject *info)
                 sprintf(str, " ORDER BY GRADETABLE.ID ASC ");
                 strcat(tmp, str);
             }
-            else if( info->qt._id && !info->qt._subject )   // 按学号查找
+            else if( info->qt._id && !info->qt._subject && !info->qt._kcid )   // 按学号查找
             {
                 char str[512] = {0};
                 sprintf(str, " AND GRADETABLE.ID = %d ", gt->_id);
                 strcat(tmp, str);
             }
-            else if( info->qt._subject && !info->qt._id )   // 按科目查找
+            else if( info->qt._subject && !info->qt._id && !info->qt._kcid )   // 按科目查找
             {
                 char str[512] = {0};
                 sprintf(str, " AND TIMETABLE.NAME = '%s' ", gt->_subject);
+                strcat(tmp, str);
+            }
+            else if( info->qt._kcid && info->qt._id )   // 按学号和课程号查找
+            {
+                char str[512] = {0};
+                sprintf(str, " AND GRADETABLE.ID = %d AND GRADETABLE.KCH = %d ", gt->_id, gt->_kch);
                 strcat(tmp, str);
             }
             else    // 按学号和科目联查
@@ -379,6 +385,7 @@ SelectInfo *sql_select(AddObject *info)
         else
         {
             // 查询成功 打印结果
+            //printf("rows: %d  cols: %d\n", rows, cols);
             if( rows && cols )
             {
                 printf("\n---------------------------------------------\n");
@@ -609,6 +616,32 @@ int sql_add(AddObject *info, char *filename)
                     continue;
                 }
 
+                // 先查询是否存在
+                char tmp[2048] = {0};
+                sprintf(tmp, "SELECT * FROM GRADETABLE WHERE ID = %d AND KCH = %d", gt->_id, gt->_kch );
+
+                char **result = NULL;
+                int rows = 0;
+                int cols = 0;
+                //printf("%s\n", sql_cmd);
+
+                ret = sqlite3_get_table(pdb, tmp, &result, &rows, &cols, NULL);
+                if( ret !=  SQLITE_OK)
+                {
+                    printf("sqlite3_get_table fail: %s\n", sqlite3_errmsg(pdb));
+                    ret = -1;
+                }
+                else
+                {
+                    // 查询成功 打印结果
+                    if( rows && cols )
+                    {
+                        printf("添加失败，已存在：[%d %d]\n", gt->_id, gt->_kch);
+                        continue;
+                    }
+                }
+
+                // 添加
                 sprintf(sql_cmd, "INSERT INTO GRADETABLE VALUES(%d, %d, %f);", 
                                             gt->_id, gt->_kch, gt->_score);
 

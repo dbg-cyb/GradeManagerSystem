@@ -85,11 +85,29 @@ int grade_manager_add( GradeTable* gt )
         }
     }while( enter );
 
-    ret = sql_add(ab, (filename[0] == '\0') ? NULL : filename);
-    if( ret != 0 ){
-        printf("添加失败，请确保该用户信息或者课程信息存在!\n");
-    }else{
-        printf("添加成功!\n");
+    // 先查找看是否查找该信息
+    ab->qt._id = 1;
+    ab->qt._kcid = 1;
+    ab->qt._subject = 0;
+    ab->qt._all = 0;
+
+    // 先查询判断信息是否已经存在
+    SelectInfo* si = sql_select(ab);
+    if( si )
+    {
+        // 已经存在信息，无法添加
+        printf("该用户成绩信息已存在！\n");
+        sql_free(si);
+    }
+    else
+    {
+        // 信息未存在，可以添加
+        ret = sql_add(ab, (filename[0] == '\0') ? NULL : filename);
+        if( ret != 0 ){
+            printf("添加失败，请确保该用户信息或者课程信息存在!\n");
+        }else{
+            printf("添加成功!\n");
+        }
     }
 
     free(ab);
